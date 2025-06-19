@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BGL/DL Casino Tax Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+  <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center mb-6 text-purple-700">🎰 Casino Tax Calculator</h1>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block font-medium text-gray-700">Bet Per Player:</label>
+        <div class="flex gap-2">
+          <input type="number" id="betInput" class="mt-1 w-full p-2 border rounded" placeholder="e.g. 5" />
+          <select id="unit" class="mt-1 p-2 border rounded">
+            <option value="DL">DL</option>
+            <option value="BGL">BGL</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="calculate()" class="w-full bg-purple-700 text-white font-semibold py-2 rounded hover:bg-purple-800 transition">
+        Calculate
+      </button>
+    </div>
+
+    <div id="result" class="mt-6 text-lg font-medium text-center text-green-700 whitespace-pre-wrap"></div>
+  </div>
+
+  <script>
+    const players = 2;
+
+    function toBGLDLWL(wls) {
+      const totalWL = Math.round(wls);
+      const bgl = Math.floor(totalWL / 10000);
+      const remWL = totalWL % 10000;
+      const dl = Math.floor(remWL / 100);
+      const wl = remWL % 100;
+      return `${bgl} BGL(s), ${dl} DL(s), ${wl} WL(s)`;
+    }
+
+    function calculate() {
+      const betInput = parseFloat(document.getElementById("betInput").value);
+      const unit = document.getElementById("unit").value;
+
+      if (isNaN(betInput) || betInput <= 0) {
+        document.getElementById("result").textContent = '⚠️ Enter a valid positive bet.';
+        return;
+      }
+
+      // Convert input to DL
+      const betPerPlayerDL = unit === "BGL" ? betInput * 100 : betInput;
+
+      // Total pot from all players
+      const totalPotDL = betPerPlayerDL * players;
+
+      // Tax is 10% of the full pot
+      const taxDL = totalPotDL * 0.10;
+
+      // Winner gets the rest
+      const winnerGetsDL = totalPotDL - taxDL;
+
+      const totalPotWL = totalPotDL * 100;
+      const taxWL = taxDL * 100;
+      const winnerWL = winnerGetsDL * 100;
+
+      document.getElementById("result").textContent =
+`💰 Total Pot: ${totalPotDL.toFixed(2)} DLs
+→ ${toBGLDLWL(totalPotWL)}
+
+🧾 Tax (10% of full pot): ${taxDL.toFixed(2)} DLs
+→ ${toBGLDLWL(taxWL)}
+
+🏆 Winner Gets: ${winnerGetsDL.toFixed(2)} DLs
+→ ${toBGLDLWL(winnerWL)}`;
+    }
+  </script>
+</body>
+</html>
