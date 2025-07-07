@@ -58,7 +58,7 @@
       const totalPotDL = betPerPlayerDL * players;
 
       // Tax is 10% of the full pot
-      const taxDL = totalPotDL * 0.10;
+      const taxDL = totalPotDL * 0.05;
 
       // Winner gets the rest
       const winnerGetsDL = totalPotDL - taxDL;
@@ -71,7 +71,7 @@
 `💰 Total Pot: ${totalPotDL.toFixed(2)} DLs
 → ${toBGLDLWL(totalPotWL)}
 
-🧾 Tax (10% of full pot): ${taxDL.toFixed(2)} DLs
+🧾 Tax (5% of full pot): ${taxDL.toFixed(2)} DLs
 → ${toBGLDLWL(taxWL)}
 
 🏆 Winner Gets: ${winnerGetsDL.toFixed(2)} DLs
